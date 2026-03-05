@@ -99,7 +99,8 @@ vim.g.mapleader = " "
 | Mode                 | Touche  | Action          |
 | -------------------- | ------- | --------------- |
 | Normal/Insert/Visual | `<C-s>` | Save            |
-| Normal/Insert/Visual | `<C-q>` | Save & Quit all |
+| Normal/Insert/Visual | `<C-q>` | Save & Quit|
+| Normal/Insert/Visual | `<C-Q>` | Quit all|
 
 
 ## Escape ergonomiques
