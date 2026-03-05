@@ -16,6 +16,13 @@ vim.g.mapleader = " "
 
 | Mode   | Touche       | Description                                   |
 | ------ | ------------ | --------------------------------------------- |
+| Normal |     `s`      | quick word search                             |
+
+
+## Navigation Quickfix
+
+| Mode   | Touche       | Description                                   |
+| ------ | ------------ | --------------------------------------------- |
 | Normal | `<leader>ln` | Aller au quickfix suivant                     |
 | Normal | `<leader>lp` | Aller au quickfix précédent                   |
 | Normal | `<leader>lq` | Fermer la fenêtre quickfix                    |
