@@ -61,7 +61,7 @@ map('n', '<C-n>', function() Snacks.words.jump(1) end,  { desc = 'Mot suivant' }
 map('n', '<C-p>', function() Snacks.words.jump(-1) end, { desc = 'Mot précédent' })
 
 -- LazyGit
-map('n', '<leader>G', function() Snacks.lazygit.open() end,      { desc = 'LazyGit' })
+map('n', '<C-g>', function() Snacks.lazygit.open() end,      { desc = 'LazyGit' })
 
 -- Folding ergonomique via leader
 map("n", "<leader>m", "zm", { desc = "Fold all" })
