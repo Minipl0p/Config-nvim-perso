@@ -23,6 +23,13 @@ vim.g.mapleader = " "
 
 | Mode   | Touche       | Description                                   |
 | ------ | ------------ | --------------------------------------------- |
+| Normal |     `<leader>bb`      | replace infile                             |
+| Normal |     `<leader>bn`      | replace project                             |
+
+## Navigation Quickfix
+
+| Mode   | Touche       | Description                                   |
+| ------ | ------------ | --------------------------------------------- |
 | Normal | `<leader>ln` | Aller au quickfix suivant                     |
 | Normal | `<leader>lp` | Aller au quickfix précédent                   |
 | Normal | `<leader>lq` | Fermer la fenêtre quickfix                    |
