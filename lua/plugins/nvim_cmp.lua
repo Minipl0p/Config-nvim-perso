@@ -8,8 +8,8 @@ return {
 		'hrsh7th/cmp-path',
 	},
 	config = function()
-		local cmp = require('cmp')
-		local luasnip = require('luasnip')
+		local cmp = require("cmp")
+		local luasnip = require("luasnip")
 
 		cmp.setup({
 			snippet = {
@@ -24,22 +24,16 @@ return {
 				['<C-e>'] = cmp.mapping.abort(),
 				['<CR>'] = cmp.mapping.confirm({ select = true }),
 
-				-- ✅ Tab pour sauter au paramètre suivant
+				-- Tab ne navigue PAS dans la completion, mais saute dans le snippet
 				['<Tab>'] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
-					elseif luasnip.locally_jumpable(1) then
+					if luasnip.locally_jumpable(1) then
 						luasnip.jump(1)
 					else
 						fallback()
 					end
 				end, { 'i', 's' }),
-
-				-- ✅ Shift+Tab pour revenir au paramètre précédent
 				['<S-Tab>'] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
-					elseif luasnip.locally_jumpable(-1) then
+					if luasnip.locally_jumpable(-1) then
 						luasnip.jump(-1)
 					else
 						fallback()
@@ -53,5 +47,5 @@ return {
 				{ name = 'path' },
 			}),
 		})
-	end,
+	end
 }

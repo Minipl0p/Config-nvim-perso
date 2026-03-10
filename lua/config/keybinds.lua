@@ -40,9 +40,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
--- neotree
-map("n", "<leader>e", "<cmd>Neotree float toggle<cr>", { desc = "Neo-tree (float)" })
-
 -- telescope
 map('n', '<leader>f', function()
 	require('telescope.builtin').find_files()
