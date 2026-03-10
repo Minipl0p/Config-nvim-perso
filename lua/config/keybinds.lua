@@ -20,6 +20,16 @@ vim.keymap.set('n', '<C-t>', function()
 	require('snacks').terminal.toggle()
 end, { desc = 'Toggle terminal snacks en mode normal' })
 
+-- Netree float
+vim.keymap.set("n", "<leader>e", function()
+	require("neo-tree.command").execute({
+		source = "filesystem",
+		focus = true,
+		reveal = true,
+		position = "float",
+	})
+end, { desc = "Neo-tree focus (float)" })
+
 -- Lsp
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(event)
