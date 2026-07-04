@@ -4,13 +4,12 @@ return {
     opts = {
         options = {
             fmt = string.lower,
-            -- theme = 'nightfly',
-			component_separators = { left = '', right = ''},
-			section_separators = { left = '', right = ''},
+            component_separators = { left = '', right = ''},
+            section_separators = { left = '', right = ''},
             always_divide_middle = false,
             globalstatus = false,
         },
-        -- Adding things to the bottom bar
+        -- Bottom bar
         sections = {
             lualine_a = {
                 { 'mode', fmt = function(str) return str:sub(1,1) end }
@@ -19,11 +18,7 @@ return {
                  'selectioncount', 'filetype', 'lsp_status'
             },
         },
-        -- Adding things to the top bar
-        tabline = {
-            lualine_a = { { 'buffers', hide_filename_extension = true, } },
-            lualine_x = { { 'datetime', style = "%H:%M", } }
-        },
+        -- Top tab bar is now handled by bufferline.nvim (removed lualine tabline).
         winbar = {},
         inactive_winbar = {},
         extensions = {},
