@@ -47,10 +47,9 @@ end, { desc = "Neo-tree focus (float)" })
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(event)
 		local opts = { buffer = event.buf }
-		map('n', 'gd', vim.lsp.buf.definition, opts)
-		map('n', 'gD', vim.lsp.buf.declaration, opts)
-		-- <leader>r : LSP references (remplace l'ancien gr).
-		map('n', '<leader>r', vim.lsp.buf.references, { buffer = event.buf, desc = "LSP references" })
+		map('n', 'gd', vim.lsp.buf.definition, opts)   -- définition
+		map('n', 'gD', vim.lsp.buf.declaration, opts)  -- déclaration
+		map('n', 'gr', vim.lsp.buf.references, opts)    -- références
 		map('n', 'K', vim.lsp.buf.hover, opts)
 		map('n', '<leader>bb', vim.lsp.buf.rename, opts)
 		map("n", "<leader>bn", function()
@@ -65,25 +64,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- ==========================================================================
--- Telescope (pickers regroupés sous le préfixe <leader>f)
+-- Telescope (binds simples, pas de combo à 3 touches)
 -- ==========================================================================
--- <leader>ff : find files   (déplacé de <leader>f pour éviter le délai de préfixe)
--- <leader>fb : buffers
--- <leader>fr : fichiers récents (oldfiles)
--- <leader>fh : help tags
--- <leader>fd : diagnostics
--- <leader>fk : keymaps
--- <leader>fm : man pages
--- <leader>g  : live grep (inchangé)
-map('n', '<leader>ff', function() require('telescope.builtin').find_files() end,   { desc = 'Telescope: find files' })
-map('n', '<leader>fb', function() require('telescope.builtin').buffers() end,      { desc = 'Telescope: buffers' })
-map('n', '<leader>fr', function() require('telescope.builtin').oldfiles() end,     { desc = 'Telescope: fichiers récents' })
-map('n', '<leader>fh', function() require('telescope.builtin').help_tags() end,    { desc = 'Telescope: help tags' })
-map('n', '<leader>fd', function() require('telescope.builtin').diagnostics() end,  { desc = 'Telescope: diagnostics' })
-map('n', '<leader>fk', function() require('telescope.builtin').keymaps() end,      { desc = 'Telescope: keymaps' })
-map('n', '<leader>fm', function() require('telescope.builtin').man_pages() end,    { desc = 'Telescope: man pages' })
-
-map('n', '<leader>g', function() require('telescope.builtin').live_grep() end,     { desc = 'Telescope: live grep' })
+-- <leader>f : find files
+-- <leader>g : live grep
+-- <leader>d : diagnostics
+-- <leader>M : man pages
+map('n', '<leader>f', function() require('telescope.builtin').find_files() end,  { desc = 'Telescope: find files' })
+map('n', '<leader>g', function() require('telescope.builtin').live_grep() end,   { desc = 'Telescope: live grep' })
+map('n', '<leader>d', function() require('telescope.builtin').diagnostics() end, { desc = 'Telescope: diagnostics' })
+map('n', '<leader>M', function() require('telescope.builtin').man_pages() end,   { desc = 'Telescope: man pages' })
 
 -- Clear search highlight (enlève le surlignage de la dernière recherche /).
 map('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlight', silent = true })
@@ -95,8 +85,8 @@ map('n', '<C-p>', function() Snacks.words.jump(-1) end, { desc = 'Mot précéden
 -- LazyGit
 map('n', '<C-g>', function() Snacks.lazygit.open() end,      { desc = 'LazyGit' })
 
--- NOTE: Folding (<leader>m / <leader>r / <leader>j) retiré temporairement.
--- <leader>r est désormais LSP references. Le folding sera repris à une étape dédiée.
+-- NOTE: Folding (<leader>m / <leader>j) et <leader>r sont libres.
+-- Le folding sera repris à une étape dédiée (choix de nouveaux binds).
 
 -- Navigation fenêtres rotative
 map("n", "<leader>c", "<C-w>w", { desc = "Next window" })
