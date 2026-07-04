@@ -4,9 +4,9 @@ return {
   keys = {
     -- s : saut rapide (normal + visuel). PAS de mode "o" pour laisser
     -- l'operator-pending libre (surround cs/ds/ys viendra en Step 12).
-    { "s", mode = { "n", "x" }, function() require("flash").jump() end, desc = "Flash jump" },
+    { "s", mode = { "n", "x", "o"}, function() require("flash").jump() end, desc = "Flash jump" },
     -- S : saut sur des nœuds Treesitter (sélection de blocs de code).
-    { "S", mode = { "n", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+    { "S", mode = { "n", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
   },
   opts = {
     label = {

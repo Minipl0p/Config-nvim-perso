@@ -199,3 +199,22 @@ local function paste_reindent(before)
 end
 map("n", "p", paste_reindent(false), { desc = "Paste + reindent" })
 map("n", "P", paste_reindent(true), { desc = "Paste before + reindent" })
+
+-- ==========================================================================
+-- [Step 12] Édition : Comment, Join, Indent visuel
+-- ==========================================================================
+
+-- Comment (natif Neovim 0.10+). <C-/> et <C-_> (selon terminal) pour commenter.
+--   Normal : commente la ligne courante.
+--   Visuel : commente la sélection.
+map("n", "<C-/>", "gcc", { remap = true, desc = "Commenter la ligne" })
+map("n", "<C-_>", "gcc", { remap = true, desc = "Commenter la ligne" })
+map("x", "<C-/>", "gc",  { remap = true, desc = "Commenter la sélection" })
+map("x", "<C-_>", "gc",  { remap = true, desc = "Commenter la sélection" })
+
+-- Join : joint la ligne suivante SANS déplacer le curseur.
+map("n", "J", "mzJ`z", { desc = "Join (curseur fixe)", silent = true })
+
+-- Indent en visuel : garde la sélection pour enchaîner les indentations.
+map("x", "<", "<gv", { desc = "Désindenter (garde sélection)", silent = true })
+map("x", ">", ">gv", { desc = "Indenter (garde sélection)", silent = true })
