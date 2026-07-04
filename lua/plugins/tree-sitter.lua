@@ -1,35 +1,25 @@
 return {
 	'nvim-treesitter/nvim-treesitter',
-	build = ":TSUpdate",
+	branch = 'main',          -- nouvelle branche (API vim.treesitter native)
+	build = ':TSUpdate',
 	config = function()
-		-- nvim-treesitter sert maintenant juste à installer les parsers
-		require("nvim-treesitter").setup({
-			ensure_installed = {
-				"lua",
-				"c",
-				"cpp",
-				"vim",
-				"python",
-				"cmake",
-			},
-			auto_install = false,
-		})
+		-- Sur la branche `main`, nvim-treesitter sert à installer/maj les parsers.
+		require("nvim-treesitter").setup()
 
-		-- Le highlight est maintenant natif dans Neovim 0.11+
-		-- On l'active manuellement via un autocmd
+		-- Installe les parsers voulus s'ils manquent (API branche `main`).
+		local ensure = { "lua", "c", "cpp", "vim", "vimdoc", "python", "cmake", "markdown", "markdown_inline" }
+		pcall(function()
+			require("nvim-treesitter").install(ensure)
+		end)
+
+		-- Le highlight est natif dans Neovim 0.11+. On l'active par filetype.
 		vim.api.nvim_create_autocmd("FileType", {
-			pattern = { "lua", "c", "cpp", "vim", "python", "cmake" },
+			pattern = { "lua", "c", "cpp", "vim", "python", "cmake", "markdown" },
 			callback = function()
 				pcall(vim.treesitter.start)
-				vim.opt.foldmethod = "expr"
-				vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-				vim.opt.foldenable = true
-				vim.opt.foldlevelstart = 99
-				vim.opt.foldlevel = 99
-				vim.opt.foldnestmax = 1
-				vim.opt.foldtext = "getline(v:foldstart) . ' ... ' . (v:foldend - v:foldstart + 1) . ' lines'"
+				-- Indentation basée sur Treesitter (utile en C/C++).
+				vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 			end,
 		})
-
-	end
+	end,
 }
