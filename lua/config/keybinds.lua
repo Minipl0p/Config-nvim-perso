@@ -80,36 +80,7 @@ map("n", "<leader>c", "<C-w>w", { desc = "Next window" })
 map("n", "<leader>C", "<C-w>W", { desc = "Prev window" })
 
 -- ==========================================================================
--- [Step 3] Save / Quit (buffer-scoped) + Buffer navigation & ordinal close
--- ==========================================================================
-local buffers = require("config.buffers")
-
--- Save
-map({ "n", "i", "v" }, "<C-s>", "<Esc><cmd>write<CR>", { desc = "Save file", silent = true })
-
--- Quit BUFFER (never quits Neovim)
-map({ "n", "i", "v" }, "<C-q>", "<Esc><cmd>write<CR><cmd>bdelete<CR>",  { desc = "Write & close buffer", silent = true })
-map({ "n", "i", "v" }, "<C-S-q>", "<Esc><cmd>bdelete!<CR>",               { desc = "Force close buffer",   silent = true })
-
--- Buffer navigation
-map("n", "L", "<cmd>bnext<CR>", { desc = "Next buffer", silent = true })
-map("n", "H", "<cmd>bprevious<CR>", { desc = "Previous buffer", silent = true })
-
--- Close buffer by ordinal (matches the number shown in bufferline once Step 7 lands).
--- <C-1>..<C-9> require the kitty keyboard protocol (WezTerm: enable_kitty_keyboard=true).
--- <leader>1..<leader>9 are the always-working fallback.
-for i = 1, 9 do
-	map("n", "<C-" .. i .. ">", function() buffers.close_ordinal(i) end,
-		{ desc = "Close buffer " .. i, silent = true })
-	map("n", "<leader>" .. i, function() buffers.close_ordinal(i) end,
-		{ desc = "Close buffer " .. i, silent = true })
-end
-
--- Close all other buffers
-map("n", "<leader>bo", function() buffers.close_others() end, { desc = "Close other buffers", silent = true })
-
--- ==========================================================================
--- [Step 3] Save / Quit (buffer-scoped) + Buffer navigation & ordinal close
+-- [Step 3 / 3b] Save / Quit (buffer-scoped) + Buffer navigation & ordinal close
 -- ==========================================================================
 local buffers = require("config.buffers")
 
@@ -117,6 +88,8 @@ local buffers = require("config.buffers")
 map({ "n", "i", "v" }, "<C-s>", "<Esc><cmd>silent write<CR>", { desc = "Save file", silent = true })
 
 -- Quit BUFFER (never quits Neovim)
+-- <C-q>     : write then close buffer
+-- <leader>Q : force close buffer (discard changes)  [<C-Q> is unreliable in terminals]
 map({ "n", "i", "v" }, "<C-q>", function() buffers.write_and_close() end, { desc = "Write & close buffer", silent = true })
 map("n", "<leader>Q", function() buffers.force_close() end, { desc = "Force close buffer (no save)", silent = true })
 
@@ -124,14 +97,14 @@ map("n", "<leader>Q", function() buffers.force_close() end, { desc = "Force clos
 map("n", "L", "<cmd>bnext<CR>", { desc = "Next buffer", silent = true })
 map("n", "H", "<cmd>bprevious<CR>", { desc = "Previous buffer", silent = true })
 
--- Close buffer by ordinal (matches the number shown in bufferline once Step 7 lands).
+-- Close buffer by its bufferline ORDINAL (the number shown in the top tab bar).
 -- <C-1>..<C-9> require the kitty keyboard protocol (WezTerm: enable_kitty_keyboard=true).
--- <leader>1..<leader>9 are the always-working fallback.
+-- <leader>1..<leader>9 are the always-working fallback. Prompts if the tab is unsaved.
 for i = 1, 9 do
 	map("n", "<C-" .. i .. ">", function() buffers.close_ordinal(i) end,
-	{ desc = "Close buffer " .. i, silent = true })
+		{ desc = "Close buffer " .. i, silent = true })
 	map("n", "<leader>" .. i, function() buffers.close_ordinal(i) end,
-	{ desc = "Close buffer " .. i, silent = true })
+		{ desc = "Close buffer " .. i, silent = true })
 end
 
 -- Close all OTHER buffers.  <C-`> (kitty protocol) + <leader>bo (always works).
