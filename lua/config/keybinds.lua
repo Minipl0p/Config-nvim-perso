@@ -112,9 +112,6 @@ map('n', '<leader>M', function() require('telescope.builtin').man_pages() end,  
 -- Clear search highlight (enlève le surlignage de la dernière recherche /).
 map('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlight', silent = true })
 
--- Words : naviguer entre les occurrences
-map('n', '<C-n>', function() Snacks.words.jump(1) end,  { desc = 'Mot suivant' })
-map('n', '<C-p>', function() Snacks.words.jump(-1) end, { desc = 'Mot précédent' })
 
 -- LazyGit
 map('n', '<C-g>', function() Snacks.lazygit.open() end,      { desc = 'LazyGit' })
@@ -184,21 +181,6 @@ map("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Grow window width
 map("i", "jj", "<Esc>", { noremap = true, silent = true })
 map("i", "jk", "<Esc>", { noremap = true, silent = true })
 map("i", "kk", "<Esc>", { noremap = true, silent = true })
-
--- Paste + reindent logique
-local function paste_reindent(before)
-  return function()
-    if before then
-      vim.cmd("normal! P")
-    else
-      vim.cmd("normal! p")
-    end
-    -- reindent la zone collée via marks `[` et `]`
-    vim.cmd("normal! `[=']")
-  end
-end
-map("n", "p", paste_reindent(false), { desc = "Paste + reindent" })
-map("n", "P", paste_reindent(true), { desc = "Paste before + reindent" })
 
 -- ==========================================================================
 -- [Step 12] Édition : Comment, Join, Indent visuel
