@@ -5,7 +5,8 @@ return {
 		{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 	},
 	config = function()
-		local builtin = require('telescope.builtin')
+		local telescope = require('telescope')
+		local actions = require('telescope.actions')
 		local sorters = require('telescope.sorters')
 
 		local function make_source_priority_sorter(separator)
@@ -18,7 +19,6 @@ return {
 					local score = original_scoring(self, prompt, line, ...)
 					if score <= 0 then return 0 end
 
-					local pat = separator == "$" and "%." or "%.[^:]+:"
 					-- Boost .c/.cpp/.cc/.cxx
 					if line:match("%.c" .. separator)
 						or line:match("%.cpp" .. separator)
@@ -39,14 +39,39 @@ return {
 			end
 		end
 
-		require('telescope').setup({
+		telescope.setup({
 			defaults = {
+				-- Layout lisible : liste à gauche, preview à droite.
+				layout_strategy = "horizontal",
+				layout_config = {
+					horizontal = { preview_width = 0.55 },
+					width = 0.9,
+					height = 0.9,
+					prompt_position = "top",
+				},
+				sorting_strategy = "ascending",
 				file_ignore_patterns = {
 					"%.o$",
 					"%.obj$",
 					"%.a$",
 					"%.so$",
 					"%.out$",
+					"^%.git/",
+					"/%.git/",
+					"node_modules/",
+					"%.class$",
+					"%.pyc$",
+				},
+				mappings = {
+					i = {
+						["<C-j>"] = actions.move_selection_next,
+						["<C-k>"] = actions.move_selection_previous,
+						["<Esc>"] = actions.close,
+						["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+					},
+					n = {
+						["q"] = actions.close,
+					},
 				},
 			},
 			pickers = {
@@ -55,6 +80,7 @@ return {
 				},
 				find_files = {
 					file_sorter = make_source_priority_sorter("$"),
+					hidden = true,
 				},
 				live_grep = {
 					file_sorter = make_source_priority_sorter(":"),
@@ -62,5 +88,6 @@ return {
 			},
 		})
 
+		pcall(telescope.load_extension, "fzf")
 	end
 }
