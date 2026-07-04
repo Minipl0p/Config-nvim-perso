@@ -73,3 +73,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank({ higroup = "YankHighlight", timeout = 130 })
   end,
 })
+
+-- [Step 2 additions: deterministic UX groundwork] --
+vim.opt.splitright = true                -- vertical splits open to the right (predictable)
+vim.opt.splitbelow = true                -- horizontal splits open below (predictable)
+vim.opt.confirm = true                   -- prompt instead of failing on :q with unsaved changes
+vim.opt.fillchars:append({ eob = " " })  -- hide ~ on empty lines (cleaner UI)
+vim.opt.shortmess:append("I")            -- no intro screen
+
+-- Rounded borders for all native floating windows (hover, signature, etc.)
+-- This is the global default; plugin-specific borders come in the UI step.
+vim.o.winborder = "rounded"              -- Neovim 0.11+; harmless no-op on older versions

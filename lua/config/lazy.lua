@@ -1,3 +1,7 @@
+-- Leaders MUST be set before lazy.setup so plugin `keys=` specs resolve <leader> correctly.
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -21,4 +25,6 @@ require("lazy").setup({
 		{ import = "plugins.lsp" },
 	},
 	change_detection = { notify = false },
+	ui = { border = "rounded" },   -- rounded border for the :Lazy UI (border-consistency groundwork)
+	checker = { enabled = false },  -- deterministic: no background update prompts
 })
