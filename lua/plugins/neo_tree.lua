@@ -6,6 +6,8 @@ return {
     "nvim-tree/nvim-web-devicons",
     "MunifTanjim/nui.nvim",
   },
+  -- On charge Neo-tree tôt pour pouvoir remplacer l'ouverture d'un dossier au démarrage.
+  lazy = false,
   keys = {
     {
       "<leader>e",
@@ -21,7 +23,7 @@ return {
     },
   },
   opts = {
-    close_if_last_window = true,
+    -- Plus de fermeture auto liée à "dernière fenêtre" : on n'utilise QUE le float.
     popup_border_style = "rounded",
     enable_git_status = true,
     enable_diagnostics = true,
@@ -74,6 +76,9 @@ return {
       },
     },
     filesystem = {
+      -- CLÉ DU FIX : Neo-tree ne hijack plus jamais l'ouverture d'un dossier.
+      -- Donc `nvim .` n'ouvre AUCUNE sidebar Neo-tree.
+      hijack_netrw_behavior = "disabled",
       filtered_items = {
         visible = true,
         hide_dotfiles = false,
