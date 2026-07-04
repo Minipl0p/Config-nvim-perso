@@ -10,10 +10,8 @@ return {
 		terminal  = {
 			enabled = true,
 			win = {
-				position = "float",       -- pour fenêtre flottante
-				border = "rounded",       -- look sympa
-				width = 0.8,
-				height = 0.8,
+				position = "bottom",   -- split horizontal en bas (plus de float)
+				height = 0.1,          -- ~30% de la hauteur de l'écran
 			},
 		},
 

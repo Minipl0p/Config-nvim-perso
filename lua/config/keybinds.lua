@@ -11,14 +11,27 @@ map('n', '<leader>le', function()
 	vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.ERROR })
 end, { desc = 'Erreurs projet → quickfix' })
 
---term : toggle
-vim.keymap.set('t', '<C-t>', function()
-	vim.cmd('q') -- ferme le terminal flottant
-end, { desc = 'Fermer terminal snacks en mode terminal' })
+-- ==========================================================================
+-- Terminal (snacks — split horizontal en bas)
+-- ==========================================================================
+local function toggle_term()
+	require("snacks").terminal.toggle()
+end
 
-vim.keymap.set('n', '<C-t>', function()
-	require('snacks').terminal.toggle()
-end, { desc = 'Toggle terminal snacks en mode normal' })
+-- <C-t> : toggle (ouvre / hide en gardant l'historique) — normal + terminal.
+map("n", "<C-t>", toggle_term, { desc = "Toggle terminal", silent = true })
+map("t", "<C-t>", toggle_term, { desc = "Toggle terminal", silent = true })
+
+-- <Esc><Esc> : terminal-mode -> normal mode.
+map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Terminal: to normal mode", silent = true })
+
+-- En mode terminal, TOUTES les <C-flèche> cyclent les 4 tailles prédéfinies
+-- (très fin -> fin -> moyen -> fullscreen). Pas de resize fin : c'est du toggle.
+--   Up / Right = plus grand    |    Down / Left = plus petit
+map("t", "<C-Up>",    [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(1)<CR>i]],  { desc = "Terminal: taille +", silent = true })
+map("t", "<C-Right>", [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(1)<CR>i]],  { desc = "Terminal: taille +", silent = true })
+map("t", "<C-Down>",  [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(-1)<CR>i]], { desc = "Terminal: taille -", silent = true })
+map("t", "<C-Left>",  [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(-1)<CR>i]], { desc = "Terminal: taille -", silent = true })
 
 -- Netree float
 vim.keymap.set("n", "<leader>e", function()
@@ -90,7 +103,7 @@ map({ "n", "i", "v" }, "<C-s>", "<Esc><cmd>silent write<CR>", { desc = "Save fil
 
 -- Quit BUFFER (never quits Neovim)
 -- <C-q>     : write then close buffer
--- <leader>Q : force close buffer (discard changes)  [<C-Q> is unreliable in terminals]
+-- <C-S-q>   : force close buffer (discard changes)
 map({ "n", "i", "v" }, "<C-q>", function() buffers.write_and_close() end, { desc = "Write & close buffer", silent = true })
 map("n", "<C-S-q>", function() buffers.force_close() end, { desc = "Force close buffer (no save)", silent = true })
 
@@ -113,7 +126,7 @@ map("n", "<C-`>", function() buffers.close_others() end, { desc = "Close other b
 map("n", "<leader>bo", function() buffers.close_others() end, { desc = "Close other buffers", silent = true })
 
 -- ==========================================================================
--- [Step 4] Windows / splits + resize
+-- [Step 4] Windows / splits + resize (fenêtres de CODE)
 -- ==========================================================================
 -- Create splits (open right/below thanks to splitright/splitbelow in options.lua)
 map("n", "<leader>v", "<cmd>vsplit<CR>", { desc = "Split vertical", silent = true })
@@ -126,7 +139,8 @@ map("n", "<leader>w", "<C-w>c", { desc = "Close window (split)", silent = true }
 -- Equalize all split sizes
 map("n", "<leader>=", "<C-w>=", { desc = "Equalize splits", silent = true })
 
--- Resize windows with Ctrl + Arrow keys
+-- Resize windows (CODE) with Ctrl + Arrow keys — resize fin +/-2.
+-- (En mode terminal, <C-flèche> sert au cycle de tailles, voir plus haut.)
 map("n", "<C-Up>",    "<cmd>resize +2<CR>",          { desc = "Grow window height", silent = true })
 map("n", "<C-Down>",  "<cmd>resize -2<CR>",          { desc = "Shrink window height", silent = true })
 map("n", "<C-Left>",  "<cmd>vertical resize -2<CR>", { desc = "Shrink window width", silent = true })

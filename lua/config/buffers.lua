@@ -104,6 +104,45 @@ function M.force_close()
 	pcall(vim.cmd, "bdelete!")
 end
 
+-- ==========================================================================
+-- Terminal size cycle (very thin -> thin -> medium -> fullscreen)
+-- + remembers the last size so toggling off/on keeps it.
+-- ==========================================================================
+-- Heights: absolute line counts for the small ones, fractions for the big ones.
+--   1 = très fin (8 lines), 2 = fin (15 lines), 3 = moyen (~50%), 4 = fullscreen (~95%)
+local TERM_LEVELS = { 8, 15, 0.5, 0.95 }
+local term_level = 2  -- default starting level (matches the ~0.3 you had, roughly "fin")
+
+--- Resolve a level value to an absolute number of lines for :resize.
+local function level_to_lines(v)
+	if v <= 1 then
+		-- fraction of total editor height
+		return math.max(3, math.floor(vim.o.lines * v))
+	end
+	return v
+end
+
+--- Apply the current level's height to the current window.
+local function apply_term_level()
+	local lines = level_to_lines(TERM_LEVELS[term_level])
+	pcall(vim.cmd, "resize " .. lines)
+end
+
+--- Cycle terminal size. direction = 1 (bigger) or -1 (smaller). Bounded (no wrap).
+function M.cycle_term_size(direction)
+	local new_level = term_level + direction
+	if new_level < 1 then new_level = 1 end
+	if new_level > #TERM_LEVELS then new_level = #TERM_LEVELS end
+	term_level = new_level
+	apply_term_level()
+end
+
+--- Re-apply the remembered size to the current (terminal) window.
+--- Called by an autocmd when a terminal window is entered/opened (toggle on).
+function M.apply_saved_term_size()
+	apply_term_level()
+end
+
 -- Debug: show what the ordinal resolver sees.
 vim.api.nvim_create_user_command("BufOrdinals", function()
 	local ids = ordered_ids()
