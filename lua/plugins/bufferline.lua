@@ -15,9 +15,30 @@ return {
       show_buffer_close_icons = false, -- clean, keyboard-driven
       show_close_icon = false,
       always_show_bufferline = true,
+      hover = {                        -- info-bulle souris (n'affecte pas le clavier)
+        enabled = true,
+        delay = 200,
+        reveal = { "close" },
+      },
+      indicator = {                    -- barre visuelle sur le buffer actif
+        style = "underline",
+      },
+      -- Nombre d'erreurs/warnings par onglet (plus lisible que le badge brut).
+      diagnostics_indicator = function(count, level)
+        local icon = level:match("error") and " " or " "
+        return " " .. count .. icon
+      end,
+      -- IMPORTANT : masque les buffers terminaux (snacks) de la bufferline.
+      -- Sans ça, un terminal pourrait apparaître comme onglet numéroté et
+      -- décaler les ordinaux <C-1>..<C-9> (qui doivent cibler tes fichiers).
+      custom_filter = function(buf_number)
+        if vim.bo[buf_number].buftype == "terminal" then
+          return false
+        end
+        return true
+      end,
       -- Respect case as-is (bufferline shows the real filename; no lowercasing).
-      -- Show git status indicators next to the name:
-      -- (bufferline reads gitsigns; added/changed/removed reflected via highlights)
+      -- Git status indicators are read from gitsigns (added/changed/removed).
     },
   },
   config = function(_, opts)
