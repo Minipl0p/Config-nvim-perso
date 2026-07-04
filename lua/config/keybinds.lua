@@ -43,25 +43,59 @@ vim.keymap.set("n", "<leader>e", function()
 	})
 end, { desc = "Neo-tree focus (float)" })
 
--- Lsp
+-- ==========================================================================
+-- LSP (buffer-local, une fois le serveur attaché)
+-- ==========================================================================
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(event)
-		local opts = { buffer = event.buf }
-		map('n', 'gd', vim.lsp.buf.definition, opts)   -- définition
-		map('n', 'gD', vim.lsp.buf.declaration, opts)  -- déclaration
-		map('n', 'gr', vim.lsp.buf.references, opts)    -- références
-		map('n', 'K', vim.lsp.buf.hover, opts)
-		map('n', '<leader>bb', vim.lsp.buf.rename, opts)
-		map("n", "<leader>bn", function()
-			vim.lsp.buf.rename()
-		end, { desc = "Rename project-wide (best effort)" })
+		local bopts = { buffer = event.buf }
+		map('n', 'gd', vim.lsp.buf.definition, bopts)   -- définition
+		map('n', 'gD', vim.lsp.buf.declaration, bopts)  -- déclaration
+		map('n', 'gr', vim.lsp.buf.references, bopts)    -- références
+		map('n', 'K', vim.lsp.buf.hover, bopts)
+
+		-- <leader>b : rename SÉMANTIQUE projet entier (LSP).
+		-- Invite VIDE -> le curseur est prêt à taper le NOUVEAU nom.
+		map('n', '<leader>b', function()
+			vim.ui.input({ prompt = "Nouveau nom : " }, function(new_name)
+				if new_name and new_name ~= "" then
+					vim.lsp.buf.rename(new_name)
+				end
+			end)
+		end, { buffer = event.buf, desc = "Rename projet (LSP)" })
+
+		-- Code action (applique automatiquement).
 		map('n', '<leader>z', function()
 			vim.lsp.buf.code_action({ apply = true })
-		end, opts)
-		map('n', '[d', vim.diagnostic.goto_prev, opts)
-		map('n', ']d', vim.diagnostic.goto_next, opts)
+		end, bopts)
+
+		-- Navigation diagnostics.
+		map('n', '[d', vim.diagnostic.goto_prev, bopts)
+		map('n', ']d', vim.diagnostic.goto_next, bopts)
 	end,
 })
+
+-- <leader>n : rename dans le FICHIER (texte, marche même sans LSP).
+-- Curseur placé PRÊT à écrire le remplacement (entre les deux / du milieu).
+vim.keymap.set('n', '<leader>n', function()
+	local w = vim.fn.expand('<cword>')
+	if w == '' then return end
+	-- :%s/\<mot\>//gI  puis 3x <Left> pour placer le curseur entre les //
+	local keys = ':%s/\\<' .. w .. '\\>//gI' .. string.rep('<Left>', 3)
+	local termcodes = vim.api.nvim_replace_termcodes(keys, true, false, true)
+	vim.api.nvim_feedkeys(termcodes, 'n', false)
+end, { desc = "Rename dans le fichier (curseur prêt)" })
+
+-- ==========================================================================
+-- Déplacements rapides <C-hjkl> (normal + visuel)
+--   <C-j> : 10 lignes bas      <C-k> : 10 lignes haut
+--   <C-l> : mot suivant (w)    <C-h> : mot précédent (b)
+-- NB: <C-flèches> restent le resize des splits / la taille du terminal.
+-- ==========================================================================
+map({ "n", "x" }, "<C-j>", "10j", { desc = "10 lignes bas", silent = true })
+map({ "n", "x" }, "<C-k>", "10k", { desc = "10 lignes haut", silent = true })
+map({ "n", "x" }, "<C-l>", "w",   { desc = "Mot suivant", silent = true })
+map({ "n", "x" }, "<C-h>", "b",   { desc = "Mot précédent", silent = true })
 
 -- ==========================================================================
 -- Telescope (binds simples, pas de combo à 3 touches)
@@ -100,7 +134,7 @@ local buffers = require("config.buffers")
 -- Save
 map({ "n", "i", "v" }, "<C-s>", "<Esc><cmd>silent write<CR>", { desc = "Save file", silent = true })
 
--- Quit BUFFER (never quits Neovim)
+-- Quit BUFFER (si dernier fichier -> quitte Neovim, voir buffers.lua)
 -- <C-q>     : write then close buffer
 -- <C-S-q>   : force close buffer (discard changes)
 map({ "n", "i", "v" }, "<C-q>", function() buffers.write_and_close() end, { desc = "Write & close buffer", silent = true })
@@ -120,9 +154,8 @@ for i = 1, 9 do
 		{ desc = "Close buffer " .. i, silent = true })
 end
 
--- Close all OTHER buffers.  <C-`> (kitty protocol) + <leader>bo (always works).
+-- Close all OTHER buffers.  <C-`> (kitty protocol).
 map("n", "<C-`>", function() buffers.close_others() end, { desc = "Close other buffers", silent = true })
-map("n", "<leader>bo", function() buffers.close_others() end, { desc = "Close other buffers", silent = true })
 
 -- ==========================================================================
 -- [Step 4] Windows / splits + resize (fenêtres de CODE)

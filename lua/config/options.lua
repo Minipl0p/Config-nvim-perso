@@ -70,7 +70,8 @@ vim.api.nvim_set_hl(0, "YankHighlight", { bg = "#FFA500", ctermbg = 214 })
 vim.api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
   callback = function()
-    vim.highlight.on_yank({ higroup = "YankHighlight", timeout = 130 })
+    -- vim.highlight est déprécié depuis Nvim 0.12 -> on utilise vim.hl.
+    vim.hl.on_yank({ higroup = "YankHighlight", timeout = 130 })
   end,
 })
 
