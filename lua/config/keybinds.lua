@@ -59,7 +59,8 @@ map('n', '<leader>g', function()
 	require('telescope.builtin').live_grep()
 end, { desc = 'Telescope live grep' })
 
-map('n', '<leader>h', function()
+-- Man pages moved from <leader>h to <leader>fm (<leader>h is now horizontal split)
+map('n', '<leader>fm', function()
 	require('telescope.builtin').man_pages()
 end, { desc = 'Telescope man pages' })
 
@@ -91,7 +92,7 @@ map({ "n", "i", "v" }, "<C-s>", "<Esc><cmd>silent write<CR>", { desc = "Save fil
 -- <C-q>     : write then close buffer
 -- <leader>Q : force close buffer (discard changes)  [<C-Q> is unreliable in terminals]
 map({ "n", "i", "v" }, "<C-q>", function() buffers.write_and_close() end, { desc = "Write & close buffer", silent = true })
-map("n", "<leader>Q", function() buffers.force_close() end, { desc = "Force close buffer (no save)", silent = true })
+map("n", "<C-S-q>", function() buffers.force_close() end, { desc = "Force close buffer (no save)", silent = true })
 
 -- Buffer navigation
 map("n", "L", "<cmd>bnext<CR>", { desc = "Next buffer", silent = true })
@@ -112,14 +113,31 @@ map("n", "<C-`>", function() buffers.close_others() end, { desc = "Close other b
 map("n", "<leader>bo", function() buffers.close_others() end, { desc = "Close other buffers", silent = true })
 
 -- ==========================================================================
+-- [Step 4] Windows / splits + resize
+-- ==========================================================================
+-- Create splits (open right/below thanks to splitright/splitbelow in options.lua)
+map("n", "<leader>v", "<cmd>vsplit<CR>", { desc = "Split vertical", silent = true })
+map("n", "<leader>h", "<cmd>split<CR>",  { desc = "Split horizontal", silent = true })
+
+-- Close the WINDOW (split pane) — buffer stays open elsewhere.
+-- This is your "close the split" key. Distinct from <C-q> (close buffer).
+map("n", "<leader>w", "<C-w>c", { desc = "Close window (split)", silent = true })
+
+-- Equalize all split sizes
+map("n", "<leader>=", "<C-w>=", { desc = "Equalize splits", silent = true })
+
+-- Resize windows with Ctrl + Arrow keys
+map("n", "<C-Up>",    "<cmd>resize +2<CR>",          { desc = "Grow window height", silent = true })
+map("n", "<C-Down>",  "<cmd>resize -2<CR>",          { desc = "Shrink window height", silent = true })
+map("n", "<C-Left>",  "<cmd>vertical resize -2<CR>", { desc = "Shrink window width", silent = true })
+map("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Grow window width", silent = true })
+
+-- ==========================================================================
 
 -- Escape ergonomique (insert)
 map("i", "jj", "<Esc>", { noremap = true, silent = true })
 map("i", "jk", "<Esc>", { noremap = true, silent = true })
 map("i", "kk", "<Esc>", { noremap = true, silent = true })
-
--- Vertical split (horizontal split arrives in Step 4)
-map("n", "<leader>v", "<cmd>vsplit<cr>", { desc = "Vertical split" })
 
 -- Paste + reindent logique
 local function paste_reindent(before)
