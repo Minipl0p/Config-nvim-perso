@@ -89,7 +89,7 @@ map({ "n", "i", "v" }, "<C-s>", "<Esc><cmd>write<CR>", { desc = "Save file", sil
 
 -- Quit BUFFER (never quits Neovim)
 map({ "n", "i", "v" }, "<C-q>", "<Esc><cmd>write<CR><cmd>bdelete<CR>",  { desc = "Write & close buffer", silent = true })
-map({ "n", "i", "v" }, "<C-Q>", "<Esc><cmd>bdelete!<CR>",               { desc = "Force close buffer",   silent = true })
+map({ "n", "i", "v" }, "<C-S-q>", "<Esc><cmd>bdelete!<CR>",               { desc = "Force close buffer",   silent = true })
 
 -- Buffer navigation
 map("n", "L", "<cmd>bnext<CR>", { desc = "Next buffer", silent = true })
