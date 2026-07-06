@@ -1,0 +1,73 @@
+# =============================================================================
+# Style C / C++ personnel — basé sur LLVM, ajusté selon tes règles.
+# =============================================================================
+Language: Cpp
+BasedOnStyle: LLVM
+
+# --- Indentation : TABS (largeur 4) ------------------------------------------
+UseTab: Always              # indentation avec des tabs (pas d'espaces)
+TabWidth: 4                 # un tab = 4 colonnes d'affichage
+IndentWidth: 4
+
+# --- Longueur de ligne -------------------------------------------------------
+ColumnLimit: 100            # coupe au-delà de 100 colonnes
+# Coupe aux virgules SANS entasser plusieurs args par ligne quand ça déborde :
+BinPackParameters: false    # 1 paramètre par ligne si la déclaration déborde
+BinPackArguments: false     # 1 argument par ligne si l'appel déborde
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowAllArgumentsOnNextLine: true
+
+# --- Accolades : STYLE MIXTE -------------------------------------------------
+#   Fonctions        -> { sur une NOUVELLE ligne (Allman)
+#   if/for/while/etc -> { en FIN de ligne (K&R)
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: true       # fonction : { à la ligne
+  AfterControlStatement: Never   # if/for/while : { collé en fin de ligne
+  AfterClass: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterEnum: true
+  AfterNamespace: true
+  BeforeElse: false         # "} else {" sur la même ligne
+  BeforeCatch: false
+  SplitEmptyFunction: false # permet void f(void) {} compacté (voir plus bas)
+
+# --- Instructions courtes ----------------------------------------------------
+# if (x) sans accolades -> corps EN DESSOUS (jamais "if (x) foo();" sur 1 ligne)
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+# Fonctions COURTES autorisées sur une ligne (ex: getters, no-op)
+AllowShortFunctionsOnASingleLine: All
+AllowShortCaseLabelsOnASingleLine: false
+
+# --- Pointeurs / références : à DROITE (collés au nom) -----------------------
+PointerAlignment: Right     # int *p;   char *str;
+ReferenceAlignment: Right   # int &ref;
+DerivePointerAlignment: false
+
+# --- Espaces -----------------------------------------------------------------
+SpaceBeforeParens: ControlStatements  # espace : if (x) / for () ; PAS foo ()
+SpaceInEmptyParentheses: false
+SpacesInParentheses: false            # pas d'espace dedans : (x) pas ( x )
+SpacesInSquareBrackets: false
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true  # x = 1 (opérateurs espacés)
+SpacesBeforeTrailingComments: 1       # (l'alignement est géré ci-dessous)
+
+# --- Alignements -------------------------------------------------------------
+AlignConsecutiveDeclarations: true    # aligne les déclarations de variables
+AlignConsecutiveAssignments: true     # aligne les =
+AlignTrailingComments: true           # aligne les commentaires de fin de ligne
+AlignConsecutiveMacros: true          # aligne aussi les #define
+AlignOperands: true
+
+# --- switch / case -----------------------------------------------------------
+IndentCaseLabels: true      # case indenté sous le switch
+
+# --- Divers (cohérence) ------------------------------------------------------
+BreakBeforeBinaryOperators: None
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+SortIncludes: true         # ne réordonne pas tes #include automatiquement
