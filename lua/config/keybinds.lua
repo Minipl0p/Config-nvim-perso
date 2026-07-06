@@ -205,3 +205,13 @@ map("n", "J", "mzJ`z", { desc = "Join (curseur fixe)", silent = true })
 -- Indent en visuel : garde la sélection pour enchaîner les indentations.
 map("x", "<", "<gv", { desc = "Désindenter (garde sélection)", silent = true })
 map("x", ">", ">gv", { desc = "Indenter (garde sélection)", silent = true })
+
+-- <leader>n en mode VISUEL : pré-écrit une substitution sur la sélection.
+-- Résultat dans la ligne de commande :  :'<,'>s//g
+-- avec le curseur placé entre les deux premiers / (prêt à taper le motif).
+-- Le préfixe '<,'> est ajouté automatiquement par Neovim car on est en visuel.
+vim.keymap.set("x", "<leader>n", function()
+	local keys = ":s//g" .. string.rep("<Left>", 2)
+	local termcodes = vim.api.nvim_replace_termcodes(keys, true, false, true)
+	vim.api.nvim_feedkeys(termcodes, "n", false)
+end, { desc = "Remplacer dans la sélection (curseur prêt)" })
