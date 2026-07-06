@@ -28,10 +28,14 @@ map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Terminal: to normal mode", silen
 -- En mode terminal, TOUTES les <C-flèche> cyclent les 4 tailles prédéfinies
 -- (très fin -> fin -> moyen -> fullscreen). Pas de resize fin : c'est du toggle.
 --   Up / Right = plus grand    |    Down / Left = plus petit
-map("t", "<C-Up>",    [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(1)<CR>i]],  { desc = "Terminal: taille +", silent = true })
-map("t", "<C-Right>", [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(1)<CR>i]],  { desc = "Terminal: taille +", silent = true })
-map("t", "<C-Down>",  [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(-1)<CR>i]], { desc = "Terminal: taille -", silent = true })
-map("t", "<C-Left>",  [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(-1)<CR>i]], { desc = "Terminal: taille -", silent = true })
+map("t", "<C-Up>", [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(1)<CR>i]],
+	{ desc = "Terminal: taille +", silent = true })
+map("t", "<C-Right>", [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(1)<CR>i]],
+	{ desc = "Terminal: taille +", silent = true })
+map("t", "<C-Down>", [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(-1)<CR>i]],
+	{ desc = "Terminal: taille -", silent = true })
+map("t", "<C-Left>", [[<C-\><C-n><cmd>lua require("config.buffers").cycle_term_size(-1)<CR>i]],
+	{ desc = "Terminal: taille -", silent = true })
 
 -- Netree float
 vim.keymap.set("n", "<leader>e", function()
@@ -49,9 +53,9 @@ end, { desc = "Neo-tree focus (float)" })
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(event)
 		local bopts = { buffer = event.buf }
-		map('n', 'gd', vim.lsp.buf.definition, bopts)   -- définition
-		map('n', 'gD', vim.lsp.buf.declaration, bopts)  -- déclaration
-		map('n', 'gr', vim.lsp.buf.references, bopts)    -- références
+		map('n', 'gd', vim.lsp.buf.definition, bopts) -- définition
+		map('n', 'gD', vim.lsp.buf.declaration, bopts) -- déclaration
+		map('n', 'gr', vim.lsp.buf.references, bopts) -- références
 		map('n', 'K', vim.lsp.buf.hover, bopts)
 
 		-- <leader>b : rename SÉMANTIQUE projet entier (LSP).
@@ -94,8 +98,8 @@ end, { desc = "Rename dans le fichier (curseur prêt)" })
 -- ==========================================================================
 map({ "n", "x" }, "<C-j>", "10j", { desc = "10 lignes bas", silent = true })
 map({ "n", "x" }, "<C-k>", "10k", { desc = "10 lignes haut", silent = true })
-map({ "n", "x" }, "<C-l>", "w",   { desc = "Mot suivant", silent = true })
-map({ "n", "x" }, "<C-h>", "b",   { desc = "Mot précédent", silent = true })
+map({ "n", "x" }, "<C-l>", "w", { desc = "Mot suivant", silent = true })
+map({ "n", "x" }, "<C-h>", "b", { desc = "Mot précédent", silent = true })
 
 -- ==========================================================================
 -- Telescope (binds simples, pas de combo à 3 touches)
@@ -104,17 +108,17 @@ map({ "n", "x" }, "<C-h>", "b",   { desc = "Mot précédent", silent = true })
 -- <leader>g : live grep
 -- <leader>d : diagnostics
 -- <leader>M : man pages
-map('n', '<leader>f', function() require('telescope.builtin').find_files() end,  { desc = 'Telescope: find files' })
-map('n', '<leader>g', function() require('telescope.builtin').live_grep() end,   { desc = 'Telescope: live grep' })
+map('n', '<leader>f', function() require('telescope.builtin').find_files() end, { desc = 'Telescope: find files' })
+map('n', '<leader>g', function() require('telescope.builtin').live_grep() end, { desc = 'Telescope: live grep' })
 map('n', '<leader>d', function() require('telescope.builtin').diagnostics() end, { desc = 'Telescope: diagnostics' })
-map('n', '<leader>M', function() require('telescope.builtin').man_pages() end,   { desc = 'Telescope: man pages' })
+map('n', '<leader>M', function() require('telescope.builtin').man_pages() end, { desc = 'Telescope: man pages' })
 
 -- Clear search highlight (enlève le surlignage de la dernière recherche /).
 map('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlight', silent = true })
 
 
 -- LazyGit
-map('n', '<C-g>', function() Snacks.lazygit.open() end,      { desc = 'LazyGit' })
+map('n', '<C-g>', function() Snacks.lazygit.open() end, { desc = 'LazyGit' })
 
 -- NOTE: Folding (<leader>m / <leader>j) et <leader>r sont libres.
 -- Le folding sera repris à une étape dédiée (choix de nouveaux binds).
@@ -134,7 +138,8 @@ map({ "n", "i", "v" }, "<C-s>", "<Esc><cmd>silent write<CR>", { desc = "Save fil
 -- Quit BUFFER (si dernier fichier -> quitte Neovim, voir buffers.lua)
 -- <C-q>     : write then close buffer
 -- <C-S-q>   : force close buffer (discard changes)
-map({ "n", "i", "v" }, "<C-q>", function() buffers.write_and_close() end, { desc = "Write & close buffer", silent = true })
+map({ "n", "i", "v" }, "<C-q>", function() buffers.write_and_close() end,
+	{ desc = "Write & close buffer", silent = true })
 map("n", "<C-S-q>", function() buffers.force_close() end, { desc = "Force close buffer (no save)", silent = true })
 
 -- Buffer navigation
@@ -159,7 +164,7 @@ map("n", "<C-`>", function() buffers.close_others() end, { desc = "Close other b
 -- ==========================================================================
 -- Create splits (open right/below thanks to splitright/splitbelow in options.lua)
 map("n", "<leader>v", "<cmd>vsplit<CR>", { desc = "Split vertical", silent = true })
-map("n", "<leader>h", "<cmd>split<CR>",  { desc = "Split horizontal", silent = true })
+map("n", "<leader>h", "<cmd>split<CR>", { desc = "Split horizontal", silent = true })
 
 -- Close the WINDOW (split pane) — buffer stays open elsewhere.
 -- This is your "close the split" key. Distinct from <C-q> (close buffer).
@@ -170,9 +175,9 @@ map("n", "<leader>=", "<C-w>=", { desc = "Equalize splits", silent = true })
 
 -- Resize windows (CODE) with Ctrl + Arrow keys — resize fin +/-2.
 -- (En mode terminal, <C-flèche> sert au cycle de tailles, voir plus haut.)
-map("n", "<C-Up>",    "<cmd>resize +2<CR>",          { desc = "Grow window height", silent = true })
-map("n", "<C-Down>",  "<cmd>resize -2<CR>",          { desc = "Shrink window height", silent = true })
-map("n", "<C-Left>",  "<cmd>vertical resize -2<CR>", { desc = "Shrink window width", silent = true })
+map("n", "<C-Up>", "<cmd>resize +2<CR>", { desc = "Grow window height", silent = true })
+map("n", "<C-Down>", "<cmd>resize -2<CR>", { desc = "Shrink window height", silent = true })
+map("n", "<C-Left>", "<cmd>vertical resize -2<CR>", { desc = "Shrink window width", silent = true })
 map("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Grow window width", silent = true })
 
 -- ==========================================================================
@@ -191,8 +196,8 @@ map("i", "kk", "<Esc>", { noremap = true, silent = true })
 --   Visuel : commente la sélection.
 map("n", "<C-/>", "gcc", { remap = true, desc = "Commenter la ligne" })
 map("n", "<C-_>", "gcc", { remap = true, desc = "Commenter la ligne" })
-map("x", "<C-/>", "gc",  { remap = true, desc = "Commenter la sélection" })
-map("x", "<C-_>", "gc",  { remap = true, desc = "Commenter la sélection" })
+map("x", "<C-/>", "gc", { remap = true, desc = "Commenter la sélection" })
+map("x", "<C-_>", "gc", { remap = true, desc = "Commenter la sélection" })
 
 -- Join : joint la ligne suivante SANS déplacer le curseur.
 map("n", "J", "mzJ`z", { desc = "Join (curseur fixe)", silent = true })
