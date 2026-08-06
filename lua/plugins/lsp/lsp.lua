@@ -16,6 +16,10 @@ return {
 				"clangd",
 				"pyright",
 				"lua_ls",
+				"html",
+				"cssls",
+				"ts_ls",
+				"tailwindcss",
 			},
 		})
 
@@ -30,8 +34,8 @@ return {
 		vim.lsp.config.clangd = {
 			cmd = {
 				"clangd",
-				"--background-index",   -- indexe le projet en arrière-plan (nav plus rapide)
-				"--clang-tidy",         -- conseils qualité de code en plus
+				"--background-index", -- indexe le projet en arrière-plan (nav plus rapide)
+				"--clang-tidy", -- conseils qualité de code en plus
 				-- NB: pas de --header-insertion=never : on garde l'insertion auto d'includes.
 			},
 			capabilities = capabilities,
@@ -60,7 +64,28 @@ return {
 			},
 		}
 
-		vim.lsp.enable({ "clangd", "pyright", "lua_ls" })
+		vim.lsp.config.html = {
+			cmd = { "vscode-html-language-server", "--stdio" },
+			capabilities = capabilities,
+			filetypes = { "html" },
+			root_markers = { ".git" },
+		}
+
+		vim.lsp.config.cssls = {
+			cmd = { "vscode-css-language-server", "--stdio" },
+			capabilities = capabilities,
+			filetypes = { "css", "scss", "less" },
+			root_markers = { ".git" },
+		}
+
+		vim.lsp.config.ts_ls = {
+			cmd = { "typescript-language-server", "--stdio" },
+			capabilities = capabilities,
+			filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+			root_markers = { "tsconfig.json", "package.json", ".git" },
+		}
+
+		vim.lsp.enable({ "clangd", "pyright", "lua_ls", "html", "cssls", "ts_ls" })
 
 		-- Diagnostic flottant au survol : normal (CursorHold) ET insert (CursorHoldI),
 		-- pour l'avoir dès que le curseur se pose/reste sur une ligne en erreur.
