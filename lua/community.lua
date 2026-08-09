@@ -22,10 +22,8 @@ return {
 	{ import = "astrocommunity.pack.yaml" },
 	{ import = "astrocommunity.pack.json" },
 	{ import = "astrocommunity.pack.markdown" },
-	{ import = "astrocommunity.pack.docker" },
 	{ import = "astrocommunity.pack.cmake" },
 	{ import = "astrocommunity.pack.tailwindcss" },
-	{ import = "astrocommunity.pack.vue" },
 	-- IA
 	{ import = "astrocommunity.ai.copilot-lua" },
 	-- Git
@@ -35,4 +33,25 @@ return {
 	{ import = "astrocommunity.file-explorer.yazi-nvim" },
 	-- Édition
 	{ import = "astrocommunity.motion.flash-nvim" },
+
+	-- Fix: docker pack — override le LSP avec le bon nom mason-lspconfig
+	{
+		"AstroNvim/astrolsp",
+		optional = true,
+		opts = function(_, opts)
+			opts.servers = opts.servers or {}
+			-- Retire les noms invalides ajoutés par les packs community
+			-- "docker-language-server" → le bon nom est "dockerls"
+			-- "volar" → supprimé (pack vue retiré, conflit avec ts_ls)
+			local invalid = { "docker-language-server", "volar" }
+			if opts.servers then
+				for _, bad in ipairs(invalid) do
+					opts.servers[bad] = nil
+				end
+			end
+			-- Ajoute le bon nom pour Docker LSP
+			opts.servers.dockerls = opts.servers.dockerls or {}
+			return opts
+		end,
+	},
 }
