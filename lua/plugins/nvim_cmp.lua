@@ -6,10 +6,14 @@ return {
 		'hrsh7th/cmp-nvim-lsp',
 		'hrsh7th/cmp-buffer',
 		'hrsh7th/cmp-path',
+		'rafamadriz/friendly-snippets',
 	},
 	config = function()
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
+
+		-- Charge les snippets APRES que luasnip est dispo
+		require("luasnip.loaders.from_vscode").lazy_load()
 
 		cmp.setup({
 			snippet = {
@@ -24,7 +28,6 @@ return {
 				['<C-e>'] = cmp.mapping.abort(),
 				['<CR>'] = cmp.mapping.confirm({ select = true }),
 
-				-- Tab ne navigue PAS dans la completion, mais saute dans le snippet
 				['<Tab>'] = cmp.mapping(function(fallback)
 					if luasnip.locally_jumpable(1) then
 						luasnip.jump(1)

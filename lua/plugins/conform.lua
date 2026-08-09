@@ -24,6 +24,7 @@ return {
 			css        = { "prettier" },
 			javascript = { "prettier" },
 			typescript = { "prettier" },
+			python     = { "black" },
 		},
 		formatters = {
 			clang_format = {
