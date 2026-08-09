@@ -82,10 +82,7 @@ return {
 				["H"] = { "b", desc = "Mot précédent" },
 				["L"] = { "w", desc = "Mot suivant" },
 
-				-- Désactiver <leader>f d'AstroNvim (format) pour libérer find_files
-				["<leader>f"] = false,
-
-				-- Telescope
+				-- Telescope (<leader>f remplace le format d'AstroNvim)
 				["<leader>f"] = {
 					function() require("telescope.builtin").find_files() end,
 					desc = "Telescope : trouver des fichiers",
@@ -125,6 +122,17 @@ return {
 				["<leader>8"] = { function() require("lib.buffers").close_ordinal(8) end, desc = "Fermer buffer 8" },
 				["<leader>9"] = { function() require("lib.buffers").close_ordinal(9) end, desc = "Fermer buffer 9" },
 
+				-- Fermer buffer par ordinal <C-1>..<C-9> (Kitty/WezTerm keyboard protocol)
+				["<C-1>"] = { function() require("lib.buffers").close_ordinal(1) end, desc = "Fermer buffer 1" },
+				["<C-2>"] = { function() require("lib.buffers").close_ordinal(2) end, desc = "Fermer buffer 2" },
+				["<C-3>"] = { function() require("lib.buffers").close_ordinal(3) end, desc = "Fermer buffer 3" },
+				["<C-4>"] = { function() require("lib.buffers").close_ordinal(4) end, desc = "Fermer buffer 4" },
+				["<C-5>"] = { function() require("lib.buffers").close_ordinal(5) end, desc = "Fermer buffer 5" },
+				["<C-6>"] = { function() require("lib.buffers").close_ordinal(6) end, desc = "Fermer buffer 6" },
+				["<C-7>"] = { function() require("lib.buffers").close_ordinal(7) end, desc = "Fermer buffer 7" },
+				["<C-8>"] = { function() require("lib.buffers").close_ordinal(8) end, desc = "Fermer buffer 8" },
+				["<C-9>"] = { function() require("lib.buffers").close_ordinal(9) end, desc = "Fermer buffer 9" },
+
 				-- Fermer autres buffers (<C-`> requiert le protocole clavier kitty)
 				["<C-`>"] = {
 					function() require("lib.buffers").close_others() end,
@@ -139,7 +147,7 @@ return {
 
 				-- LazyGit
 				["<C-g>"] = {
-					function() Snacks.lazygit.open() end,
+					function() require("snacks").lazygit.open() end,
 					desc = "LazyGit",
 				},
 
