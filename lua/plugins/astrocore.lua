@@ -25,12 +25,7 @@ return {
 				autoindent      = true,
 				-- Affichage des caractères invisibles
 				list            = true,
-				listchars       = {
-					tab      = "▸ ",
-					trail    = "·",
-					extends  = "…",
-					precedes = "…",
-				},
+				listchars       = "tab:▸ ,trail:·,extends:…,precedes:…",
 				-- Recherche
 				ignorecase      = true,
 				smartcase       = true,
@@ -46,14 +41,12 @@ return {
 				timeoutlen      = 500,
 				-- Visuel
 				conceallevel    = 2,   -- IMPORTANT pour render-markdown
-				winborder       = "rounded",
 				signcolumn      = "yes",
 				showmode        = false,
 				pumheight       = 10,
 				pumblend        = 10,
-				-- Divers
-				fillchars       = { eob = " " },
-				shortmess       = vim.opt.shortmess + "I",
+				-- Divers (shortmess géré nativement par AstroNvim)
+				fillchars       = "eob: ",
 			},
 		},
 
@@ -219,10 +212,10 @@ return {
 				["<leader>gx"] = { "<cmd>DiffviewClose<CR>",        desc = "Diffview : fermer" },
 
 				-- DAP
-				["<F5>"]      = { function() require("dap").continue() end,          desc = "DAP : continuer" },
-				["<F10>"]     = { function() require("dap").step_over() end,         desc = "DAP : step over" },
-				["<F11>"]     = { function() require("dap").step_into() end,         desc = "DAP : step into" },
-				["<F12>"]     = { function() require("dap").step_out() end,          desc = "DAP : step out" },
+				["<F5>"]       = { function() require("dap").continue() end,          desc = "DAP : continuer" },
+				["<F10>"]      = { function() require("dap").step_over() end,         desc = "DAP : step over" },
+				["<F11>"]      = { function() require("dap").step_into() end,         desc = "DAP : step into" },
+				["<F12>"]      = { function() require("dap").step_out() end,          desc = "DAP : step out" },
 				["<leader>db"] = { function() require("dap").toggle_breakpoint() end, desc = "DAP : breakpoint" },
 				["<leader>du"] = { function() require("dapui").toggle() end,          desc = "DAP : toggle UI" },
 				["<leader>dr"] = { function() require("dap").repl.open() end,         desc = "DAP : REPL" },
@@ -231,7 +224,7 @@ return {
 				["<leader>mp"] = { "<cmd>MarkdownPreviewToggle<CR>", desc = "Markdown : preview toggle" },
 
 				-- AI — Avante
-				["<leader>aa"] = { "<cmd>AvanteAsk<CR>",  desc = "Avante : demander" },
+				["<leader>aa"] = { "<cmd>AvanteAsk<CR>", desc = "Avante : demander" },
 
 				-- LSP rename sémantique
 				["<leader>b"] = {
@@ -351,7 +344,6 @@ return {
 						end
 					end,
 				},
-				-- Ré-appliquer la taille mémorisée quand on entre dans un terminal
 				{
 					event = { "TermOpen", "WinEnter" },
 					desc = "Restaurer la taille du terminal float",
